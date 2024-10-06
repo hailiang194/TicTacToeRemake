@@ -1,15 +1,16 @@
 <script setup lang="ts">
+  import overlay from './components/overlay.vue';
   import { useTemplateRef, onMounted } from 'vue'
   import * as initModule from './wasm/TicTacToe'
   import { Module } from './wasm/Module';
 
-  const progressElement = useTemplateRef('progress')
   const canvasElement = useTemplateRef('canvas')
 
+  var module = new Module()
+  module.statusRef.value = "Downloading..."
+
   onMounted(() => {
-    var module = new Module()
     module.canvas = canvasElement.value
-    module.process = progressElement.value
     module.canvas?.addEventListener('webglcontextlost', (e: Event) => {
       alert("WebGL context lost. You will need to reload the page."), e.preventDefault() 
     }, false)
@@ -18,14 +19,21 @@
     })
     initModule.default(module)
   })
+
+  window.onerror = () => {
+    module.setStatus('Exception thrown, see JavaScript console')
+    module.loadPercentRef.value = 0.0
+    module.setStatus = (text: string) => {
+      if (text) 
+        module.printErr('[post-exception status] ' + text); 
+    }
+  }
 </script>
 
 <template>
-   <div class="emscripten">
-    <progress hidden ref="progress" max="100" value="0"></progress>
-  </div>
-  <div class=emscripten_border>
-    <canvas class="emscripten" id="canvas" ref="canvas" tabindex="-1">
+  <overlay v-if="module.loadPercentRef.value < 100" :status="module.statusRef.value" :percentage="module.loadPercentRef.value" />
+  <div class="w-screen h-screen bg-slate-950 emscripten_border grid place-items-center">
+    <canvas class="emscripten w-full" id="canvas" ref="canvas" tabindex="-1">
     </canvas>
   </div>
 </template>

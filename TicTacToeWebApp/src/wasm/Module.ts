@@ -1,10 +1,13 @@
+import { ref, Ref } from "vue";
+
 export class Module {
+    public arguments: string[] = []
     public preRun: { (): void; }[] = []
     public postRun: { (): void; }[] = []
     public totalDependencies: number = 0
+    public statusRef: Ref<string> = ref<string>("")
+    public loadPercentRef: Ref<number> = ref<number>(0.0)
     public canvas: HTMLElement | null = null
-    public output: HTMLElement | null = null
-    public process: HTMLElement | null = null
 
 
     private last: {
@@ -16,7 +19,12 @@ export class Module {
         console.log(t)
     }
 
+    public printErr(text: string) {
+        console.error(text);
+    }
+
     public setStatus(e: string): void {
+        this.statusRef.value = e
         if (!this.last) {
             this.last = {
                 time: Date.now(),
@@ -34,19 +42,15 @@ export class Module {
             }
 
             if(t) {
-                (this.process as HTMLProgressElement).value = 100 * parseInt(t[2]);
-                (this.process as HTMLProgressElement).max = 100 * parseInt(t[4]);
-                (this.process as HTMLProgressElement).hidden = false;
+                this.loadPercentRef.value = (100 * parseInt(t[2]) * 100) / 100 * parseInt(t[4])
             } else {
-                (this.process as HTMLProgressElement).value = 100;
-                (this.process as HTMLProgressElement).max = 100;
-                (this.process as HTMLProgressElement).hidden = true;
+                this.loadPercentRef.value = 100.0
             }
         }
     }
 
-    monitorRunDependencies(e: number): void {
+    public monitorRunDependencies(e: number): void {
         this.totalDependencies = Math.max(this.totalDependencies, e)
-        this.setStatus(e ? `Prepare...(${this.totalDependencies - e}/${this.totalDependencies})` : "All downloads complete.");
+        this.setStatus(e != 0 ? `Prepare...(${this.totalDependencies - e}/${this.totalDependencies})` : "All downloads complete.");
     }
 }

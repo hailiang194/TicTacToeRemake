@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/wasm/module.ts","./src/wasm/tictactoe.d.ts","./src/app.vue","./src/components/log.vue","./src/components/overlay.vue","./src/components/process-bar.vue"],"version":"5.6.2"}
