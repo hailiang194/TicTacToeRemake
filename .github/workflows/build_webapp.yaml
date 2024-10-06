@@ -16,4 +16,6 @@ jobs:
               run: /bin/bash ./NeoSekaiEngine/scripts/pre-installer/linux/debian/preinstaller.sh
             - name: Generate project for BUILD_SHARED_LIBS=0 
               run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+            - name: Build project
+              run: cmake --build ./build --config Release
             
