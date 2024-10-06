@@ -22,6 +22,8 @@ jobs:
               uses: actions/setup-node@v4
               with:
                 node-version: '21'
-            - name: 📥 Install dependencies
-              run: npm install --prefix ./TicTacToeWebApp
+            - name: Install dependencies
+              run: npm install --prefix ./TicTacToeWebApp && npm install-wasm --prefix ./TicTacToeWebApp
+            - name: Build
+              run: npm run build --prefix ./TicTacToeWebApp
             
