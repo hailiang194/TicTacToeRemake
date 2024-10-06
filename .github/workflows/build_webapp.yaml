@@ -1,0 +1,19 @@
+name: Build Web App
+run-name: ${{ github.ref }} on ${{ github.repository }} is built for Web app
+on: [push]
+jobs:
+    Build-WebApp:
+        runs-on: "windows-latest"
+        steps:
+            - name: Check out the repository code
+              uses: actions/checkout@v4
+            - name: Setup emsdk
+              uses: mymindstorm/setup-emsdk@v14
+              with:
+                version: 3.1.25
+                actions-cache-folder: 'emsdk-cache'
+            - name: Generate project with test for BUILD_SHARED_LIBS=0 
+              run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+            - name: Build project
+              run: cmake --build ./build --config Release
+            
