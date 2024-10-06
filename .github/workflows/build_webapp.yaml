@@ -26,4 +26,10 @@ jobs:
               run: npm install --prefix ./TicTacToeWebApp && npm run install-wasm --prefix ./TicTacToeWebApp
             - name: Build
               run: npm run build --prefix ./TicTacToeWebApp
+            - name: 🚀Deploy to GitHub Pages🚀  // --> this deploys to gh-pages
+              if: github.ref == 'refs/heads/main'
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_dir: ./TicTacToeWebApp/dist
             

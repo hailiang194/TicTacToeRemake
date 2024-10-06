@@ -4,7 +4,7 @@ import * as path from 'path'
 
 const WASM_PATH = "../build/out"
 const NODE_WASM_PATH = "./src/wasm"
-const PUBLIC_PATH = "./path"
+const PUBLIC_PATH = "./public"
 
 fs.access(WASM_PATH, fs.constants.F_OK, (error) => {
     if(error) {
