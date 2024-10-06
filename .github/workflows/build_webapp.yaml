@@ -13,7 +13,7 @@ jobs:
                 version: 3.1.25
                 actions-cache-folder: 'emsdk-cache'
             - name: setup library
-              run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
+              run: /bin/bash ./NeoSekaiEngine/scripts/pre-installer/linux/debian/preinstaller.sh
             - name: Generate project for BUILD_SHARED_LIBS=0 
               run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
             
